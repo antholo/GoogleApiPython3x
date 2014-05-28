@@ -1252,7 +1252,7 @@ class OAuth2WebServerFlow(Flow):
       refresh_token.
     """
 
-    if not (isinstance(code, str) or isinstance(code, str)):
+    if not (isinstance(code, str) or isinstance(code, bytes)):
       if 'code' not in code:
         if 'error' in code:
           error_msg = code['error']
@@ -1306,7 +1306,7 @@ class OAuth2WebServerFlow(Flow):
       logger.info('Failed to retrieve access token: %s' % content)
       if 'error' in d:
         # you never know what those providers got to say
-        error_msg = str(d['error'])
+        error_msg = bytes(d['error'], encoding = 'utf-8')
       else:
         error_msg = 'Invalid response: %s.' % str(resp.status)
       raise FlowExchangeError(error_msg)
